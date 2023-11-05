@@ -1,8 +1,7 @@
 from datetime import datetime
-from typing import Annotated, Optional
+from typing import Optional
 
-from fastapi import HTTPException, status
-from pydantic import BaseModel, Field, conint, validator
+from pydantic import BaseModel, Field, conint
 
 from app.core.constants import MAX_NAME_LENGTH, MIN_STRING_LENGTH
 
@@ -31,4 +30,8 @@ class CharityProjectDB(CharityProjectCreate):
 
 
 class CharityProjectUpdate(CharityProjectBase):
-    pass
+    name: Optional[str] = Field(
+        None, min_length=MIN_STRING_LENGTH, max_length=MAX_NAME_LENGTH
+    )
+    description: Optional[str] = Field(None, min_length=MIN_STRING_LENGTH)
+    full_amount: Optional[conint(gt=0)] = None
