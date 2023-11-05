@@ -1,10 +1,8 @@
-from uuid import UUID
-
-from sqlalchemy import Column, ForeignKey, Integer, String, Text
+from sqlalchemy import Column, ForeignKey, Integer, Text
 
 from app.models.base import CharityProjectDonationGeneric
 
 
 class Donation(CharityProjectDonationGeneric):
-    user_id = Column(String, ForeignKey("user.id"))
+    user_id = Column(Integer, ForeignKey("user.id"))
     comment = Column(Text)

@@ -1,6 +1,5 @@
 from datetime import datetime
 from typing import Optional
-from uuid import UUID
 
 from pydantic import BaseModel, conint
 
@@ -14,13 +13,16 @@ class DonationCreate(DonationBase):
     pass
 
 
-class DonationDB(DonationCreate):
+class DonationResponse(DonationCreate):
     id: int
     create_date: datetime
-    user_id: UUID
-    invested_amount: int
-    fully_invested: bool
-    close_date: Optional[datetime]
 
     class Config:
         orm_mode = True
+
+
+class DonationDB(DonationResponse):
+    user_id: int
+    invested_amount: int
+    fully_invested: bool
+    close_date: Optional[datetime]

@@ -1,12 +1,11 @@
 from typing import Optional, Union
-from uuid import UUID
 
 from fastapi import Depends, Request
 from fastapi_users import (
     BaseUserManager,
-    FastAPIUsers,  # IntegerIDMixin,
+    FastAPIUsers,
+    IntegerIDMixin,
     InvalidPasswordException,
-    UUIDIDMixin,
 )
 from fastapi_users.authentication import (
     AuthenticationBackend,
@@ -40,7 +39,7 @@ auth_backend = AuthenticationBackend(
 )
 
 
-class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
+class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     async def validate_password(
         self,
         password: str,
@@ -65,7 +64,7 @@ async def get_user_manager(user_db=Depends(get_user_db)):
     yield UserManager(user_db)
 
 
-fastapi_users = FastAPIUsers[User, UUID](
+fastapi_users = FastAPIUsers[User, int](
     get_user_manager,
     [auth_backend],
 )
