@@ -1,13 +1,9 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.validators import (
-    check_charity_project_fully_invested,
-    check_name_duplicate,
-    check_project_before_edit,
-)
+from app.api.validators import check_name_duplicate, check_project_before_edit
 from app.core.db import get_async_session
-from app.core.user import current_superuser, current_user
+from app.core.user import current_superuser
 from app.crud.charity_project import charity_project_crud
 from app.schemas.charity_project import (
     CharityProjectCreate,

@@ -1,13 +1,11 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.validators import check_name_duplicate
 from app.core.db import get_async_session
 from app.core.user import current_superuser, current_user
 from app.crud.donation import donation_crud
 from app.models.user import User
 from app.schemas.donation import DonationCreate, DonationDB, DonationResponse
-
 from app.services.investment import investment
 
 router = APIRouter()
