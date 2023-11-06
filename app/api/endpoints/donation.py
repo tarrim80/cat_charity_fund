@@ -46,7 +46,7 @@ async def get_all_donations(
 ):
     """Только для суперюзеров.
 
-    Получает список всех пожертвований.
+    Возвращает список всех пожертвований.
     """
     all_projects = await donation_crud.get_multi(session)
     return all_projects
@@ -63,7 +63,7 @@ async def get_user_donations(
     session: AsyncSession = Depends(get_async_session),
     user: User = Depends(current_user),
 ):
-    """Получить список моих пожертвований."""
+    """Вернуть список пожертвований пользователя, выполняющего запрос."""
     my_reservations = await donation_crud.get_by_user(
         session=session, user=user
     )

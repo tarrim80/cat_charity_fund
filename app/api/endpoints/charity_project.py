@@ -51,7 +51,7 @@ async def create_charity_project(
 async def get_all_charity_projects(
     session: AsyncSession = Depends(get_async_session),
 ):
-    """Получает список всех проектов."""
+    """Возвращает список всех проектов."""
     all_projects = await charity_project_crud.get_multi(session)
     return all_projects
 
@@ -94,7 +94,7 @@ async def update_charity_project(
 ):
     """Только для суперюзеров.
 
-    Закрытый проект нельзя редактировать, также нельзя установить требуемую
+    Закрытый проект нельзя редактировать; нельзя установить требуемую
     сумму меньше уже вложенной.
     """
     obj_in_data = obj_in.dict()
