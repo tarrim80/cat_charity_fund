@@ -23,32 +23,32 @@ async def distributing_investment(
     entity2: Entity,
 ) -> Entity:
     """Распределение инвестиций."""
+
     if entity1.fully_invested:
         return entity1
+
     stmt = await session.execute(
         select(entity2).where(not_(entity2.fully_invested))
     )
     open_entity = stmt.scalars().first()
+
     if open_entity is None:
         return entity1
-    open_entity_amount = open_entity.full_amount - open_entity.invested_amount
-    income_amount = entity1.full_amount - entity1.invested_amount
+
     entities = [entity1, open_entity]
+    min_entity = min(entities, key=lambda x: x.missing_amount)
+    max_entity = entities[0] if min_entity == entities[1] else entities[1]
 
-    if income_amount == open_entity_amount:
-        await increase_invested_amount(entities=entities, amount=income_amount)
-        await close_investment(entity=entity1)
-        await close_investment(entity=open_entity)
+    await increase_invested_amount(
+        entities=entities, amount=min_entity.missing_amount
+    )
+    await close_investment(entity=min_entity)
 
-    elif income_amount > open_entity_amount:
-        await increase_invested_amount(
-            entities=entities, amount=open_entity_amount
-        )
-        await close_investment(entity=open_entity)
-
-    else:
-        await increase_invested_amount(entities=entities, amount=income_amount)
-        await close_investment(entity=entity1)
+    if all(
+        entity.missing_amount == entities[0].missing_amount
+        for entity in entities
+    ):
+        await close_investment(entity=max_entity)
 
     await update_db(entities=entities, session=session)
     return await distributing_investment(
