@@ -1,7 +1,11 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.validators import check_name_duplicate, check_project_before_edit
+from app.api.validators import (
+    check_charity_project_fully_invested,
+    check_name_duplicate,
+    check_project_before_edit,
+)
 from app.core.db import get_async_session
 from app.core.user import current_superuser
 from app.crud.charity_project import charity_project_crud
@@ -100,6 +104,11 @@ async def update_charity_project(
         obj_in_data=obj_in_data,
         session=session,
         request=request,
+    )
+    charity_project = await check_charity_project_fully_invested(
+        session=session,
+        obj_in_data=obj_in_data,
+        charity_project=charity_project,
     )
     charity_project = await charity_project_crud.update(
         db_obj=charity_project, obj_in=obj_in, session=session

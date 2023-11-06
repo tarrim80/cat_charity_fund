@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from fastapi import HTTPException, Request, status
@@ -18,6 +19,17 @@ async def check_name_duplicate(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Проект с таким именем уже существует!",
         )
+
+
+async def check_charity_project_fully_invested(
+    charity_project: CharityProject,
+    session: AsyncSession,
+    obj_in_data: dict,
+) -> CharityProject:
+    if obj_in_data["full_amount"] == charity_project.invested_amount:
+        charity_project.fully_invested = True
+        charity_project.close_date = datetime.now()
+    return charity_project
 
 
 async def check_project_before_edit(
