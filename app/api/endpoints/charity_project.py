@@ -37,10 +37,7 @@ async def create_charity_project(
     await check_name_duplicate(charity_project.name, session)
 
     new_project = await charity_project_crud.create(charity_project, session)
-    after_investment_project = await investment(
-        session=session, entity=new_project
-    )
-    return after_investment_project
+    return await investment(session=session, entity=new_project)
 
 
 @router.get(
@@ -52,8 +49,7 @@ async def get_all_charity_projects(
     session: AsyncSession = Depends(get_async_session),
 ):
     """Возвращает список всех проектов."""
-    all_projects = await charity_project_crud.get_multi(session)
-    return all_projects
+    return await charity_project_crud.get_multi(session)
 
 
 @router.delete(
@@ -74,10 +70,7 @@ async def delete_charity_project(
     charity_project = await check_project_before_edit(
         project_id=project_id, session=session, request=request
     )
-    charity_project = await charity_project_crud.remove(
-        charity_project, session
-    )
-    return charity_project
+    return await charity_project_crud.remove(charity_project, session)
 
 
 @router.patch(
@@ -110,7 +103,6 @@ async def update_charity_project(
         obj_in_data=obj_in_data,
         charity_project=charity_project,
     )
-    charity_project = await charity_project_crud.update(
+    return await charity_project_crud.update(
         db_obj=charity_project, obj_in=obj_in, session=session
     )
-    return charity_project

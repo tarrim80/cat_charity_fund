@@ -35,7 +35,7 @@ async def distributing_investment(
     if open_entity is None:
         return entity1
 
-    entities = [entity1, open_entity]
+    entities = (entity1, open_entity)
     min_entity = min(entities, key=lambda x: x.missing_amount)
     max_entity = entities[0] if min_entity == entities[1] else entities[1]
 

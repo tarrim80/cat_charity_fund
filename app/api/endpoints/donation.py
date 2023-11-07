@@ -29,10 +29,7 @@ async def create_donation(
     new_donation = await donation_crud.create(
         obj_in=donation, session=session, user=user
     )
-    after_investment_donation = await investment(
-        session=session, entity=new_donation
-    )
-    return after_investment_donation
+    return await investment(session=session, entity=new_donation)
 
 
 @router.get(
@@ -48,8 +45,7 @@ async def get_all_donations(
 
     Возвращает список всех пожертвований.
     """
-    all_projects = await donation_crud.get_multi(session)
-    return all_projects
+    return await donation_crud.get_multi(session)
 
 
 @router.get(
@@ -64,7 +60,4 @@ async def get_user_donations(
     user: User = Depends(current_user),
 ):
     """Вернуть список пожертвований пользователя, выполняющего запрос."""
-    my_reservations = await donation_crud.get_by_user(
-        session=session, user=user
-    )
-    return my_reservations
+    return await donation_crud.get_by_user(session=session, user=user)
