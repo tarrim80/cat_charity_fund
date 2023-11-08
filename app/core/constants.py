@@ -2,9 +2,6 @@ MAX_NAME_LENGTH = 100
 MIN_STRING_LENGTH = 1
 MIN_AMOUNT = 1
 
-MIN_PASSWORD_LENGTH = 3
-LIFETIME_JWT = 3600
-
 
 class ErrorMsg:
     PROJECT_ALREADY_EXISTS = "Проект с таким именем уже существует!"
